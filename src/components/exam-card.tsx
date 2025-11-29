@@ -53,7 +53,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import ExamItem from './exam-item';
 import { Skeleton } from './ui/skeleton';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from './ui/dialog';
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogClose } from './ui/dialog';
 
 type ExamCardProps = {
   exam: Exam;
