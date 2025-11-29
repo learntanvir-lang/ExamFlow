@@ -106,11 +106,15 @@ function ExamCard({ exam: initialExam }: ExamCardProps) {
     setIsSaving(true);
     try {
       const examRef = doc(db, 'users', user.uid, 'exams', exam.id);
-      await updateDoc(examRef, {
-        name: exam.name,
-        subtitle: exam.subtitle,
+      
+      const dataToUpdate = {
+        name: exam.name || '',
+        subtitle: exam.subtitle || null,
         date: exam.date,
-      });
+      };
+
+      await updateDoc(examRef, dataToUpdate);
+
       toast({
         title: 'Exam Saved',
         description: 'Your changes have been saved successfully.',
@@ -257,7 +261,7 @@ function ExamCard({ exam: initialExam }: ExamCardProps) {
             {editMode ? (
               <div className="space-y-2">
                 <Input value={exam.name} onChange={(e) => setExam({...exam, name: e.target.value})} placeholder="Exam Name" className="text-xl font-semibold md:text-2xl h-auto p-0 border-0 focus-visible:ring-0 font-headline text-primary" />
-                <Input value={exam.subtitle} onChange={(e) => setExam({...exam, subtitle: e.target.value})} placeholder="Exam Subtitle" className="h-auto p-0 border-0 focus-visible:ring-0 text-muted-foreground" />
+                <Input value={exam.subtitle || ''} onChange={(e) => setExam({...exam, subtitle: e.target.value})} placeholder="Exam Subtitle" className="h-auto p-0 border-0 focus-visible:ring-0 text-muted-foreground" />
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button variant="outline" className={cn('w-full justify-start text-left font-normal mt-2', !exam.date && 'text-muted-foreground')}>
