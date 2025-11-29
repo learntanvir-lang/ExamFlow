@@ -20,6 +20,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 import {
@@ -36,6 +37,7 @@ import {
   Loader2,
   NotebookText,
   X,
+  MoreVertical,
 } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
 import { db } from '@/lib/firebase';
@@ -49,11 +51,16 @@ import {
   addDoc,
   writeBatch,
   getDocs,
+  updateDoc,
 } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
 import ExamItem from './exam-item';
 import { Skeleton } from './ui/skeleton';
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogClose } from './ui/dialog';
+import { Input } from './ui/input';
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
+import { Calendar } from './ui/calendar';
+import { cn } from '@/lib/utils';
 
 type ExamCardProps = {
   exam: Exam;
@@ -61,16 +68,22 @@ type ExamCardProps = {
 
 const MemoizedExamItem = memo(ExamItem);
 
-function ExamCard({ exam }: ExamCardProps) {
+function ExamCard({ exam: initialExam }: ExamCardProps) {
   const { user } = useAuth();
   const { toast } = useToast();
+  const [exam, setExam] = useState(initialExam);
   const [editMode, setEditMode] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [items, setItems] = useState<ExamItemType[]>([]);
   const [loadingItems, setLoadingItems] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   const isPast = new Date(exam.date) < new Date();
+
+  useEffect(() => {
+    setExam(initialExam);
+  }, [initialExam]);
 
   useEffect(() => {
     if (!user) return;
@@ -87,6 +100,33 @@ function ExamCard({ exam }: ExamCardProps) {
     });
     return () => unsubscribe();
   }, [user, exam.id]);
+  
+  const handleSave = async () => {
+    if (!user) return;
+    setIsSaving(true);
+    try {
+      const examRef = doc(db, 'users', user.uid, 'exams', exam.id);
+      await updateDoc(examRef, {
+        name: exam.name,
+        subtitle: exam.subtitle,
+        date: exam.date,
+      });
+      toast({
+        title: 'Exam Saved',
+        description: 'Your changes have been saved successfully.',
+      });
+      setEditMode(false);
+    } catch (error) {
+       toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Failed to save changes.',
+      });
+      console.error('Error saving exam:', error);
+    } finally {
+      setIsSaving(false);
+    }
+  }
 
   const handleDeleteExam = async () => {
     if (!user) return;
@@ -159,28 +199,31 @@ function ExamCard({ exam }: ExamCardProps) {
       <Card
         className={`flex flex-col overflow-hidden transition-all duration-300 ${
           isPast ? 'opacity-70' : 'opacity-100'
-        } ${editMode ? 'shadow-accent/40 shadow-lg' : 'shadow-md'}`}
+        } ${editMode ? 'shadow-accent/40 shadow-lg ring-2 ring-accent' : 'shadow-md'}`}
       >
         <CardHeader className="relative p-0">
-          <div className="absolute right-2 top-2 z-10 flex gap-2">
-            <Button
-              size="icon"
-              variant={editMode ? 'default' : 'secondary'}
-              onClick={() => setEditMode(!editMode)}
-              className="h-9 w-9 rounded-full shadow-lg"
-            >
-              {editMode ? <Save className="h-4 w-4" /> : <FilePenLine className="h-4 w-4" />}
-              <span className="sr-only">{editMode ? 'Save' : 'Edit'}</span>
-            </Button>
-            <Button
-              size="icon"
-              variant="destructive"
-              onClick={() => setShowDeleteConfirm(true)}
-              className="h-9 w-9 rounded-full shadow-lg"
-            >
-              <Trash2 className="h-4 w-4" />
-              <span className="sr-only">Delete Exam</span>
-            </Button>
+           <div className="absolute right-2 top-2 z-10">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="secondary" size="icon" className="h-8 w-8 rounded-full bg-background/70">
+                  <MoreVertical className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => setEditMode(p => !p)}>
+                  <FilePenLine className="mr-2 h-4 w-4" />
+                  <span>{editMode ? 'Cancel Edit' : 'Edit'}</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => setShowDeleteConfirm(true)}
+                  className="text-destructive focus:bg-destructive/10 focus:text-destructive"
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  <span>Delete</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
           <Dialog>
             <DialogTrigger asChild>
@@ -211,9 +254,34 @@ function ExamCard({ exam }: ExamCardProps) {
             </DialogContent>
           </Dialog>
           <div className="p-4 pb-2 md:p-6 md:pb-2">
-            <h3 className="font-headline text-xl font-semibold text-primary md:text-2xl">{exam.name}</h3>
-            {exam.subtitle && <p className="text-muted-foreground">{exam.subtitle}</p>}
-            <p className="text-lg font-bold md:text-xl">{format(new Date(exam.date), "d MMMM, yyyy (EEEE)")}</p>
+            {editMode ? (
+              <div className="space-y-2">
+                <Input value={exam.name} onChange={(e) => setExam({...exam, name: e.target.value})} placeholder="Exam Name" className="text-xl font-semibold md:text-2xl h-auto p-0 border-0 focus-visible:ring-0 font-headline text-primary" />
+                <Input value={exam.subtitle} onChange={(e) => setExam({...exam, subtitle: e.target.value})} placeholder="Exam Subtitle" className="h-auto p-0 border-0 focus-visible:ring-0 text-muted-foreground" />
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline" className={cn('w-full justify-start text-left font-normal mt-2', !exam.date && 'text-muted-foreground')}>
+                      {exam.date ? format(new Date(exam.date), 'PPP') : <span>Pick a date</span>}
+                      <CalendarCheck className="ml-auto h-4 w-4" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0">
+                    <Calendar
+                      mode="single"
+                      selected={new Date(exam.date)}
+                      onSelect={(date) => date && setExam({...exam, date: date.toISOString()})}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+            ) : (
+              <>
+                <h3 className="font-headline text-xl font-semibold text-primary md:text-2xl">{exam.name}</h3>
+                {exam.subtitle && <p className="text-sm text-muted-foreground md:text-base">{exam.subtitle}</p>}
+                <p className="text-lg font-bold md:text-xl">{format(new Date(exam.date), "d MMMM, yyyy (EEEE)")}</p>
+              </>
+            )}
           </div>
         </CardHeader>
         <CardContent className="flex flex-1 flex-col p-4 pt-2 md:p-6 md:pt-2">
@@ -231,44 +299,50 @@ function ExamCard({ exam }: ExamCardProps) {
             )}
           </div>
           {editMode && (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="mt-4 w-full border-dashed">
-                  <PlusCircle className="mr-2 h-4 w-4" />
-                  Add Item
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56">
-                <DropdownMenuItem onClick={() => handleAddItem('countdown')}>
-                  <Timer className="mr-2 h-4 w-4" />
-                  <span>Countdown</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleAddItem('title-date')}>
-                  <CalendarCheck className="mr-2 h-4 w-4" />
-                  <span>Title + Date</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleAddItem('title-checkbox')}>
-                  <BookCopy className="mr-2 h-4 w-4" />
-                  <span>Title + Checkbox</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleAddItem('title-description')}>
-                  <NotebookText className="mr-2 h-4 w-4" />
-                  <span>Title + Description</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleAddItem('eligibility')}>
-                  <BadgeCheck className="mr-2 h-4 w-4" />
-                  <span>Eligibility Status</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleAddItem('payment')}>
-                  <CreditCard className="mr-2 h-4 w-4" />
-                  <span>Payment Status</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleAddItem('button-link')}>
-                  <Link className="mr-2 h-4 w-4" />
-                  <span>Button Link</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <div className="mt-4 space-y-2">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="w-full border-dashed">
+                    <PlusCircle className="mr-2 h-4 w-4" />
+                    Add Item
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56">
+                  <DropdownMenuItem onClick={() => handleAddItem('countdown')}>
+                    <Timer className="mr-2 h-4 w-4" />
+                    <span>Countdown</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleAddItem('title-date')}>
+                    <CalendarCheck className="mr-2 h-4 w-4" />
+                    <span>Title + Date</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleAddItem('title-checkbox')}>
+                    <BookCopy className="mr-2 h-4 w-4" />
+                    <span>Title + Checkbox</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleAddItem('title-description')}>
+                    <NotebookText className="mr-2 h-4 w-4" />
+                    <span>Title + Description</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleAddItem('eligibility')}>
+                    <BadgeCheck className="mr-2 h-4 w-4" />
+                    <span>Eligibility Status</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleAddItem('payment')}>
+                    <CreditCard className="mr-2 h-4 w-4" />
+                    <span>Payment Status</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleAddItem('button-link')}>
+                    <Link className="mr-2 h-4 w-4" />
+                    <span>Button Link</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <Button onClick={handleSave} disabled={isSaving} className="w-full">
+                {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
+                 Save Changes
+              </Button>
+            </div>
           )}
         </CardContent>
       </Card>
