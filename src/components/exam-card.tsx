@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 import Image from 'next/image';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Exam, ExamItem as ExamItemType, ItemType } from '@/lib/types';
@@ -53,13 +53,15 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import ExamItem from './exam-item';
 import { Skeleton } from './ui/skeleton';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from './ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from './ui/dialog';
 
 type ExamCardProps = {
   exam: Exam;
 };
 
-export default function ExamCard({ exam }: ExamCardProps) {
+const MemoizedExamItem = memo(ExamItem);
+
+function ExamCard({ exam }: ExamCardProps) {
   const { user } = useAuth();
   const { toast } = useToast();
   const [editMode, setEditMode] = useState(false);
@@ -210,7 +212,7 @@ export default function ExamCard({ exam }: ExamCardProps) {
           </Dialog>
           <div className="p-4 pb-2 md:p-6 md:pb-2">
             <h3 className="font-headline text-xl font-semibold text-primary md:text-2xl">{exam.name}</h3>
-            <p className="text-sm font-semibold md:text-base">{format(new Date(exam.date), "d MMMM, yyyy (EEEE)")}</p>
+            <p className="text-base font-semibold md:text-lg">{format(new Date(exam.date), "d MMMM, yyyy (EEEE)")}</p>
           </div>
         </CardHeader>
         <CardContent className="flex flex-1 flex-col p-4 md:p-6">
@@ -223,7 +225,7 @@ export default function ExamCard({ exam }: ExamCardProps) {
               </div>
             ) : (
               items.map((item) => (
-                <ExamItem key={item.id} item={item} exam={exam} editMode={editMode} />
+                <MemoizedExamItem key={item.id} item={item} exam={exam} editMode={editMode} />
               ))
             )}
           </div>
@@ -292,3 +294,5 @@ export default function ExamCard({ exam }: ExamCardProps) {
     </>
   );
 }
+
+export default memo(ExamCard);

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/hooks/use-auth';
@@ -8,6 +8,8 @@ import type { Exam } from '@/lib/types';
 import Header from './header';
 import ExamCard from './exam-card';
 import { Skeleton } from './ui/skeleton';
+
+const MemoizedExamCard = memo(ExamCard);
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -44,17 +46,17 @@ export default function Dashboard() {
     <div className="flex min-h-screen w-full flex-col">
       <Header />
       <main className="flex-1 bg-background">
-        <div className="container mx-auto px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
+        <div className="mx-auto w-full max-w-[1400px] px-0 py-4 sm:px-0 sm:py-6 lg:px-0 lg:py-8">
         {loading ? (
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <Skeleton className="h-[400px] w-full rounded-xl" />
             <Skeleton className="h-[400px] w-full rounded-xl" />
             <Skeleton className="h-[400px] w-full rounded-xl" />
            </div>
         ) : exams.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {exams.map(exam => (
-              <ExamCard key={exam.id} exam={exam} />
+              <MemoizedExamCard key={exam.id} exam={exam} />
             ))}
           </div>
         ) : (

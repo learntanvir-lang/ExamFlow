@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import { Exam, ExamItem as ExamItemType } from '@/lib/types';
 import { Countdown } from './countdown';
 import {
@@ -45,7 +45,7 @@ const ItemIcon = ({ type }: { type: ExamItemType['type'] }) => {
   return <Icon className="h-5 w-5 text-primary" />;
 };
 
-export default function ExamItem({ item, exam, editMode }: ExamItemProps) {
+function ExamItem({ item, exam, editMode }: ExamItemProps) {
   const { user } = useAuth();
   const [localItem, setLocalItem] = useState(item);
 
@@ -219,3 +219,5 @@ export default function ExamItem({ item, exam, editMode }: ExamItemProps) {
     </div>
   );
 }
+
+export default memo(ExamItem);
