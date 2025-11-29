@@ -23,6 +23,7 @@ import { deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { Calendar } from './ui/calendar';
 import { Textarea } from './ui/textarea';
+import { cn } from '@/lib/utils';
 
 type ExamItemProps = {
   item: ExamItemType;
@@ -142,11 +143,11 @@ export default function ExamItem({ item, exam, editMode }: ExamItemProps) {
                         <Popover>
                             <PopoverTrigger asChild>
                                 <Button variant="outline" className='h-9 px-3'>
-                                    {format(new Date(localItem.date), 'MMM d, yyyy')}
+                                    {format(new Date(localItem.date || new Date()), 'MMM d, yyyy')}
                                 </Button>
                             </PopoverTrigger>
                             <PopoverContent className='w-auto p-0'>
-                                <Calendar mode="single" selected={new Date(localItem.date)} onSelect={(date) => date && handleUpdate('date', date.toISOString())} />
+                                <Calendar mode="single" selected={new Date(localItem.date || new Date())} onSelect={(date) => date && handleUpdate('date', date.toISOString())} />
                             </PopoverContent>
                         </Popover>
                     </div>
@@ -199,7 +200,9 @@ export default function ExamItem({ item, exam, editMode }: ExamItemProps) {
 
 
   return (
-    <div className="group flex items-start gap-3 rounded-lg p-3 bg-secondary/30 border border-secondary/50">
+    <div className={cn("group flex items-start gap-3 rounded-lg p-3 bg-secondary/30 border border-secondary/50", {
+        'border-accent': item.type === 'countdown'
+    })}>
       <div className="flex-shrink-0 pt-1">
         <ItemIcon type={item.type} />
       </div>
