@@ -35,6 +35,7 @@ import {
   Save,
   Loader2,
   NotebookText,
+  X,
 } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
 import { db } from '@/lib/firebase';
@@ -52,7 +53,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import ExamItem from './exam-item';
 import { Skeleton } from './ui/skeleton';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from './ui/dialog';
 
 type ExamCardProps = {
   exam: Exam;
@@ -190,10 +191,14 @@ export default function ExamCard({ exam }: ExamCardProps) {
                 data-ai-hint="desk books"
               />
             </DialogTrigger>
-            <DialogContent className="p-0 border-0 max-w-4xl">
+            <DialogContent className="p-0 border-0 max-w-4xl bg-transparent shadow-none">
                <DialogHeader>
                 <DialogTitle className="sr-only">{exam.name}</DialogTitle>
               </DialogHeader>
+              <DialogClose className="absolute right-4 top-4 z-10 rounded-full border-2 border-primary bg-white p-1 text-primary opacity-80 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
+                <X className="h-5 w-5" />
+                <span className="sr-only">Close</span>
+              </DialogClose>
               <Image
                 src={exam.imageUrl}
                 alt={exam.name}
@@ -287,3 +292,5 @@ export default function ExamCard({ exam }: ExamCardProps) {
     </>
   );
 }
+
+    
