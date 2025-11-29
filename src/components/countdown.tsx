@@ -50,21 +50,21 @@ export function Countdown({ targetDate }: CountdownProps) {
 
   if (!isClient) {
     return (
-        <div className="grid grid-cols-4 gap-2 text-center">
-            <div className="p-2 rounded-md bg-muted/50">
-                <div className="text-xl font-bold font-headline">--</div>
+        <div className="grid grid-cols-4 gap-1 text-center sm:gap-2">
+            <div className="rounded-md bg-muted/50 p-1 sm:p-2">
+                <div className="text-lg font-bold font-headline sm:text-xl">--</div>
                 <div className="text-xs text-muted-foreground">Days</div>
             </div>
-            <div className="p-2 rounded-md bg-muted/50">
-                <div className="text-xl font-bold font-headline">--</div>
+            <div className="rounded-md bg-muted/50 p-1 sm:p-2">
+                <div className="text-lg font-bold font-headline sm:text-xl">--</div>
                 <div className="text-xs text-muted-foreground">Hours</div>
             </div>
-            <div className="p-2 rounded-md bg-muted/50">
-                <div className="text-xl font-bold font-headline">--</div>
+            <div className="rounded-md bg-muted/50 p-1 sm:p-2">
+                <div className="text-lg font-bold font-headline sm:text-xl">--</div>
                 <div className="text-xs text-muted-foreground">Mins</div>
             </div>
-            <div className="p-2 rounded-md bg-muted/50">
-                <div className="text-xl font-bold font-headline">--</div>
+            <div className="rounded-md bg-muted/50 p-1 sm:p-2">
+                <div className="text-lg font-bold font-headline sm:text-xl">--</div>
                 <div className="text-xs text-muted-foreground">Secs</div>
             </div>
         </div>
@@ -78,21 +78,21 @@ export function Countdown({ targetDate }: CountdownProps) {
     timeLeft.seconds <= 0;
 
   return (
-    <div className={`grid grid-cols-4 gap-2 text-center ${isPast ? 'opacity-50' : ''}`}>
-      <div className="p-2 rounded-md bg-muted/50">
-        <div className="text-xl font-bold font-headline">{String(timeLeft.days).padStart(2, '0')}</div>
+    <div className={`grid grid-cols-4 gap-1 text-center sm:gap-2 ${isPast ? 'opacity-50' : ''}`}>
+      <div className="rounded-md bg-muted/50 p-1 sm:p-2">
+        <div className="text-lg font-bold font-headline sm:text-xl">{String(timeLeft.days).padStart(2, '0')}</div>
         <div className="text-xs text-muted-foreground">Days</div>
       </div>
-      <div className="p-2 rounded-md bg-muted/50">
-        <div className="text-xl font-bold font-headline">{String(timeLeft.hours).padStart(2, '0')}</div>
+      <div className="rounded-md bg-muted/50 p-1 sm:p-2">
+        <div className="text-lg font-bold font-headline sm:text-xl">{String(timeLeft.hours).padStart(2, '0')}</div>
         <div className="text-xs text-muted-foreground">Hours</div>
       </div>
-      <div className="p-2 rounded-md bg-muted/50">
-        <div className="text-xl font-bold font-headline">{String(timeLeft.minutes).padStart(2, '0')}</div>
+      <div className="rounded-md bg-muted/50 p-1 sm:p-2">
+        <div className="text-lg font-bold font-headline sm:text-xl">{String(timeLeft.minutes).padStart(2, '0')}</div>
         <div className="text-xs text-muted-foreground">Mins</div>
       </div>
-      <div className="p-2 rounded-md bg-muted/50">
-        <div className="text-xl font-bold font-headline">{String(timeLeft.seconds).padStart(2, '0')}</div>
+      <div className="rounded-md bg-muted/50 p-1 sm:p-2">
+        <div className="text-lg font-bold font-headline sm:text-xl">{String(timeLeft.seconds).padStart(2, '0')}</div>
         <div className="text-xs text-muted-foreground">Secs</div>
       </div>
     </div>

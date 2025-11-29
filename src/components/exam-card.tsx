@@ -155,12 +155,12 @@ export default function ExamCard({ exam }: ExamCardProps) {
   return (
     <>
       <Card
-        className={`overflow-hidden transition-all duration-300 flex flex-col ${
+        className={`flex flex-col overflow-hidden transition-all duration-300 ${
           isPast ? 'opacity-70' : 'opacity-100'
         } ${editMode ? 'shadow-accent/40 shadow-lg' : 'shadow-md'}`}
       >
-        <CardHeader className="p-0 relative">
-          <div className="absolute top-2 right-2 z-10 flex gap-2">
+        <CardHeader className="relative p-0">
+          <div className="absolute right-2 top-2 z-10 flex gap-2">
             <Button
               size="icon"
               variant={editMode ? 'default' : 'secondary'}
@@ -187,15 +187,15 @@ export default function ExamCard({ exam }: ExamCardProps) {
                 alt={exam.name}
                 width={600}
                 height={400}
-                className="aspect-[3/2] w-full object-cover cursor-pointer"
+                className="aspect-[3/2] w-full cursor-pointer object-cover"
                 data-ai-hint="desk books"
               />
             </DialogTrigger>
-            <DialogContent className="p-0 border-0 max-w-4xl bg-transparent shadow-none">
+            <DialogContent className="max-w-4xl border-0 bg-transparent p-0 shadow-none">
                <DialogHeader>
                 <DialogTitle className="sr-only">{exam.name}</DialogTitle>
               </DialogHeader>
-              <DialogClose className="absolute right-4 top-4 z-10 rounded-full border-2 border-primary bg-white p-1 text-primary opacity-80 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
+              <DialogClose className="absolute right-2 top-2 z-10 rounded-full border-2 border-primary bg-white p-1 text-primary opacity-80 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 md:right-4 md:top-4">
                 <X className="h-5 w-5" />
                 <span className="sr-only">Close</span>
               </DialogClose>
@@ -204,17 +204,17 @@ export default function ExamCard({ exam }: ExamCardProps) {
                 alt={exam.name}
                 width={1200}
                 height={800}
-                className="w-full h-auto object-contain rounded-lg"
+                className="h-auto w-full rounded-lg object-contain"
               />
             </DialogContent>
           </Dialog>
-          <div className="p-4 pb-0">
-            <h3 className="font-headline text-2xl font-semibold text-primary">{exam.name}</h3>
-            <p className="text-base font-semibold">{format(new Date(exam.date), "d MMMM, yyyy (EEEE)")}</p>
+          <div className="p-4 pb-2 md:p-6 md:pb-2">
+            <h3 className="font-headline text-xl font-semibold text-primary md:text-2xl">{exam.name}</h3>
+            <p className="text-sm font-semibold md:text-base">{format(new Date(exam.date), "d MMMM, yyyy (EEEE)")}</p>
           </div>
         </CardHeader>
-        <CardContent className="p-4 flex-grow flex flex-col">
-          <div className="space-y-4 flex-grow">
+        <CardContent className="flex flex-1 flex-col p-4 md:p-6">
+          <div className="flex-grow space-y-4">
             {loadingItems ? (
               <div className="space-y-4 pt-2">
                 <Skeleton className="h-10 w-full" />
@@ -292,5 +292,3 @@ export default function ExamCard({ exam }: ExamCardProps) {
     </>
   );
 }
-
-    
