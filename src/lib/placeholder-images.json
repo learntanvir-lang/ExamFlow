@@ -1,3 +1,34 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "desk-and-books",
+      "description": "A clean desk with books and a laptop.",
+      "imageUrl": "https://images.unsplash.com/photo-1596123068611-c89d922a0f0a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxkZXNrJTIwYm9va3N8ZW58MHx8fHwxNzY0Mzc0MzE5fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "desk books"
+    },
+    {
+      "id": "library",
+      "description": "A quiet corner in a library.",
+      "imageUrl": "https://images.unsplash.com/photo-1532012197267-da84d127e765?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxsaWJyYXJ5JTIwYm9va3N8ZW58MHx8fHwxNzY0MzUwNzQwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "library books"
+    },
+    {
+      "id": "university-campus",
+      "description": "A sunny day on a university campus.",
+      "imageUrl": "https://images.unsplash.com/photo-1592280771190-3e2e4d571952?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHx1bml2ZXJzaXR5JTIwY2FtcHVzfGVufDB8fHx8MTc2NDM5MDE0OXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "university campus"
+    },
+    {
+      "id": "study-notes",
+      "description": "Handwritten study notes on a piece of paper.",
+      "imageUrl": "https://images.unsplash.com/photo-1690788210614-9052cffd8a14?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxzdHVkeSUyMG5vdGVzfGVufDB8fHx8MTc2NDM5ODAwNXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "study notes"
+    },
+    {
+      "id": "laptop-code",
+      "description": "A laptop showing lines of code.",
+      "imageUrl": "https://images.unsplash.com/photo-1555066931-bf19f8fd1085?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxsYXB0b3AlMjBjb2RlfGVufDB8fHx8MTc2NDMwNzAxOHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "laptop code"
+    }
+  ]
 }
