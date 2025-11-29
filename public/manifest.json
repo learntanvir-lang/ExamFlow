@@ -1,0 +1,16 @@
+{
+  "name": "ExamWise",
+  "short_name": "ExamWise",
+  "description": "Manage your exams with ease.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4682B4",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
