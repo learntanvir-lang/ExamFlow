@@ -41,9 +41,9 @@ export default function Dashboard() {
   }, [user]);
 
   return (
-    <div className="min-h-screen w-full">
+    <div className="min-h-screen w-full max-w-[1400px] mx-auto">
       <Header />
-      <main className="container mx-auto py-4 sm:py-6 lg:py-8 px-4 sm:px-6 lg:px-8">
+      <main className="py-4 sm:py-6 lg:py-8">
         {loading ? (
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Skeleton className="h-[400px] w-full rounded-xl" />
@@ -51,7 +51,7 @@ export default function Dashboard() {
             <Skeleton className="h-[400px] w-full rounded-xl" />
            </div>
         ) : exams.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {exams.map(exam => (
               <ExamCard key={exam.id} exam={exam} />
             ))}
