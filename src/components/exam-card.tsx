@@ -47,6 +47,7 @@ import {
   orderBy,
   addDoc,
   writeBatch,
+  getDocs,
 } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
 import ExamItem from './exam-item';
@@ -129,7 +130,7 @@ export default function ExamCard({ exam }: ExamCardProps) {
         newItemData = { ...baseItem, type, title: 'New Task', checked: false };
         break;
       case 'countdown':
-        newItemData = { ...baseItem, type };
+        newItemData = { ...baseItem, type, date: exam.date };
         break;
       case 'eligibility':
         newItemData = { ...baseItem, type, title: 'Eligibility', status: 'Pending' };

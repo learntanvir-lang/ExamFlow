@@ -74,7 +74,7 @@ export default function ExamItem({ item, exam, editMode }: ExamItemProps) {
   const renderViewMode = () => {
     switch (localItem.type) {
       case 'countdown':
-        return <Countdown targetDate={exam.date} />;
+        return <Countdown targetDate={localItem.date} />;
       case 'title-date':
         return (
           <div className="flex items-center justify-between">
@@ -118,7 +118,21 @@ export default function ExamItem({ item, exam, editMode }: ExamItemProps) {
   const renderEditMode = () => {
     switch (localItem.type) {
         case 'countdown':
-            return <div className="text-sm text-muted-foreground italic">This item displays a countdown to the exam date.</div>;
+            return (
+                <div className='flex gap-2 items-center'>
+                    <span className="text-sm text-muted-foreground flex-grow">Countdown to:</span>
+                    <Popover>
+                        <PopoverTrigger asChild>
+                            <Button variant="outline" className='h-9 px-3'>
+                                {format(new Date(localItem.date), 'MMM d, yyyy')}
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className='w-auto p-0'>
+                            <Calendar mode="single" selected={new Date(localItem.date)} onSelect={(date) => date && handleUpdate('date', date.toISOString())} />
+                        </PopoverContent>
+                    </Popover>
+                </div>
+            );
         case 'title-date':
             return (
                 <div className='flex gap-2 items-center'>

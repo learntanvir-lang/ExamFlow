@@ -34,6 +34,7 @@ export interface TitleCheckboxItem extends BaseExamItem {
 
 export interface CountdownItem extends BaseExamItem {
   type: 'countdown';
+  date: string; // ISO string
 }
 
 export interface StatusItem extends BaseExamItem {
