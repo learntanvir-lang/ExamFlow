@@ -52,6 +52,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import ExamItem from './exam-item';
 import { Skeleton } from './ui/skeleton';
+import { Dialog, DialogContent, DialogTrigger } from './ui/dialog';
 
 type ExamCardProps = {
   exam: Exam;
@@ -178,14 +179,27 @@ export default function ExamCard({ exam }: ExamCardProps) {
               <span className="sr-only">Delete Exam</span>
             </Button>
           </div>
-          <Image
-            src={exam.imageUrl}
-            alt={exam.name}
-            width={600}
-            height={400}
-            className="aspect-[3/2] w-full object-cover"
-            data-ai-hint="desk books"
-          />
+          <Dialog>
+            <DialogTrigger asChild>
+              <Image
+                src={exam.imageUrl}
+                alt={exam.name}
+                width={600}
+                height={400}
+                className="aspect-[3/2] w-full object-cover cursor-pointer"
+                data-ai-hint="desk books"
+              />
+            </DialogTrigger>
+            <DialogContent className="p-0 border-0 max-w-4xl">
+              <Image
+                src={exam.imageUrl}
+                alt={exam.name}
+                width={1200}
+                height={800}
+                className="w-full h-auto object-contain rounded-lg"
+              />
+            </DialogContent>
+          </Dialog>
           <div className="p-4 pb-0">
             <h3 className="font-headline text-2xl font-semibold text-primary">{exam.name}</h3>
             <p className="text-base font-semibold">{format(new Date(exam.date), "d MMMM, yyyy (EEEE)")}</p>
