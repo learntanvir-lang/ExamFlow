@@ -52,7 +52,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import ExamItem from './exam-item';
 import { Skeleton } from './ui/skeleton';
-import { Dialog, DialogContent, DialogTrigger } from './ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
 
 type ExamCardProps = {
   exam: Exam;
@@ -191,6 +191,9 @@ export default function ExamCard({ exam }: ExamCardProps) {
               />
             </DialogTrigger>
             <DialogContent className="p-0 border-0 max-w-4xl">
+               <DialogHeader>
+                <DialogTitle className="sr-only">{exam.name}</DialogTitle>
+              </DialogHeader>
               <Image
                 src={exam.imageUrl}
                 alt={exam.name}
