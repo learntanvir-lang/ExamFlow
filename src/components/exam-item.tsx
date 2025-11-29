@@ -10,7 +10,7 @@ import {
   CreditCard,
   Link as LinkIcon,
   Trash2,
-  GripVertical,
+  NotebookText,
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { Checkbox } from './ui/checkbox';
@@ -22,6 +22,7 @@ import { db } from '@/lib/firebase';
 import { deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { Calendar } from './ui/calendar';
+import { Textarea } from './ui/textarea';
 
 type ExamItemProps = {
   item: ExamItemType;
@@ -33,10 +34,11 @@ const ItemIcon = ({ type }: { type: ExamItemType['type'] }) => {
   const icons = {
     'title-date': CalendarCheck,
     'title-checkbox': BookCopy,
-    countdown: Timer,
-    eligibility: BadgeCheck,
-    payment: CreditCard,
+    'countdown': Timer,
+    'eligibility': BadgeCheck,
+    'payment': CreditCard,
     'button-link': LinkIcon,
+    'title-description': NotebookText,
   };
   const Icon = icons[type];
   return <Icon className="h-5 w-5 text-primary" />;
@@ -110,6 +112,13 @@ export default function ExamItem({ item, exam, editMode }: ExamItemProps) {
             </Button>
           </a>
         );
+      case 'title-description':
+        return (
+            <div>
+                <p className='font-semibold'>{localItem.title}</p>
+                <p className='text-sm text-muted-foreground'>{localItem.description}</p>
+            </div>
+        )
       default:
         return null;
     }
@@ -124,11 +133,11 @@ export default function ExamItem({ item, exam, editMode }: ExamItemProps) {
                     <Popover>
                         <PopoverTrigger asChild>
                             <Button variant="outline" className='h-9 px-3'>
-                                {format(new Date(localItem.date), 'MMM d, yyyy')}
+                                {format(new Date(localItem.date || new Date()), 'MMM d, yyyy')}
                             </Button>
                         </PopoverTrigger>
                         <PopoverContent className='w-auto p-0'>
-                            <Calendar mode="single" selected={new Date(localItem.date)} onSelect={(date) => date && handleUpdate('date', date.toISOString())} />
+                            <Calendar mode="single" selected={new Date(localItem.date || new Date())} onSelect={(date) => date && handleUpdate('date', date.toISOString())} />
                         </PopoverContent>
                     </Popover>
                 </div>
@@ -164,6 +173,13 @@ export default function ExamItem({ item, exam, editMode }: ExamItemProps) {
                 <div className='flex flex-col gap-2'>
                     <Input placeholder="Button Label" value={localItem.label} onChange={(e) => setLocalItem({...localItem, label: e.target.value})} onBlur={(e) => handleUpdate('label', e.target.value)} className='h-9'/>
                     <Input placeholder="https://..." value={localItem.url} onChange={(e) => setLocalItem({...localItem, url: e.target.value})} onBlur={(e) => handleUpdate('url', e.target.value)} className='h-9'/>
+                </div>
+            )
+        case 'title-description':
+            return (
+                <div className='flex flex-col gap-2'>
+                    <Input placeholder="Title" value={localItem.title} onChange={(e) => setLocalItem({...localItem, title: e.target.value})} onBlur={(e) => handleUpdate('title', e.target.value)} className='h-9'/>
+                    <Textarea placeholder="Description" value={localItem.description} onChange={(e) => setLocalItem({...localItem, description: e.target.value})} onBlur={(e) => handleUpdate('description', e.target.value)} />
                 </div>
             )
         default:

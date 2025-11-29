@@ -12,7 +12,8 @@ export type ItemType =
   | 'countdown'
   | 'eligibility'
   | 'payment'
-  | 'button-link';
+  | 'button-link'
+  | 'title-description';
 
 export interface BaseExamItem {
   id: string;
@@ -49,9 +50,16 @@ export interface ButtonLinkItem extends BaseExamItem {
   url: string;
 }
 
+export interface TitleDescriptionItem extends BaseExamItem {
+  type: 'title-description';
+  title: string;
+  description: string;
+}
+
 export type ExamItem =
   | TitleDateItem
   | TitleCheckboxItem
   | CountdownItem
   | StatusItem
-  | ButtonLinkItem;
+  | ButtonLinkItem
+  | TitleDescriptionItem;

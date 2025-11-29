@@ -33,8 +33,8 @@ import {
   CreditCard,
   Link,
   Save,
-  X,
   Loader2,
+  NotebookText,
 } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
 import { db } from '@/lib/firebase';
@@ -141,6 +141,9 @@ export default function ExamCard({ exam }: ExamCardProps) {
       case 'button-link':
         newItemData = { ...baseItem, type, label: 'Official Website', url: '#' };
         break;
+      case 'title-description':
+        newItemData = { ...baseItem, type, title: 'New Title', description: 'Enter your description here.' };
+        break;
       default:
         return;
     }
@@ -222,6 +225,10 @@ export default function ExamCard({ exam }: ExamCardProps) {
                 <DropdownMenuItem onClick={() => handleAddItem('title-checkbox')}>
                   <BookCopy className="mr-2 h-4 w-4" />
                   <span>Title + Checkbox</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleAddItem('title-description')}>
+                  <NotebookText className="mr-2 h-4 w-4" />
+                  <span>Title + Description</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => handleAddItem('eligibility')}>
                   <BadgeCheck className="mr-2 h-4 w-4" />
