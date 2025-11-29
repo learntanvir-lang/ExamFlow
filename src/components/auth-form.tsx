@@ -85,7 +85,7 @@ const AuthForm = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+    <div className="container mx-auto flex min-h-screen items-center justify-center bg-background px-4">
       <div className="w-full max-w-md">
         <div className="flex justify-center mb-6">
             <Logo className="h-12 w-12 text-primary" />
