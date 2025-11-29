@@ -76,7 +76,14 @@ export default function ExamItem({ item, exam, editMode }: ExamItemProps) {
   const renderViewMode = () => {
     switch (localItem.type) {
       case 'countdown':
-        return <Countdown targetDate={localItem.date} />;
+        return (
+          <div>
+            <p className="text-sm font-medium">{localItem.title}</p>
+            <div className="mt-1">
+              <Countdown targetDate={localItem.date} />
+            </div>
+          </div>
+        );
       case 'title-date':
         return (
           <div className="flex items-center justify-between">
@@ -128,18 +135,21 @@ export default function ExamItem({ item, exam, editMode }: ExamItemProps) {
     switch (localItem.type) {
         case 'countdown':
             return (
-                <div className='flex gap-2 items-center'>
-                    <span className="text-sm text-muted-foreground flex-grow">Countdown to:</span>
-                    <Popover>
-                        <PopoverTrigger asChild>
-                            <Button variant="outline" className='h-9 px-3'>
-                                {format(new Date(localItem.date || new Date()), 'MMM d, yyyy')}
-                            </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className='w-auto p-0'>
-                            <Calendar mode="single" selected={new Date(localItem.date || new Date())} onSelect={(date) => date && handleUpdate('date', date.toISOString())} />
-                        </PopoverContent>
-                    </Popover>
+                <div className='flex flex-col gap-2'>
+                    <Input placeholder="Title" value={localItem.title} onChange={(e) => setLocalItem({...localItem, title: e.target.value})} onBlur={(e) => handleUpdate('title', e.target.value)} className='h-9'/>
+                    <div className='flex gap-2 items-center'>
+                        <span className="text-sm text-muted-foreground flex-grow">To:</span>
+                        <Popover>
+                            <PopoverTrigger asChild>
+                                <Button variant="outline" className='h-9 px-3'>
+                                    {format(new Date(localItem.date), 'MMM d, yyyy')}
+                                </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className='w-auto p-0'>
+                                <Calendar mode="single" selected={new Date(localItem.date)} onSelect={(date) => date && handleUpdate('date', date.toISOString())} />
+                            </PopoverContent>
+                        </Popover>
+                    </div>
                 </div>
             );
         case 'title-date':

@@ -130,7 +130,7 @@ export default function ExamCard({ exam }: ExamCardProps) {
         newItemData = { ...baseItem, type, title: 'New Task', checked: false };
         break;
       case 'countdown':
-        newItemData = { ...baseItem, type, date: exam.date };
+        newItemData = { ...baseItem, type, title: 'Countdown', date: exam.date };
         break;
       case 'eligibility':
         newItemData = { ...baseItem, type, title: 'Eligibility', status: 'Pending' };
