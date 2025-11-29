@@ -188,7 +188,7 @@ export default function ExamCard({ exam }: ExamCardProps) {
           />
           <div className="p-4 pb-0">
             <h3 className="font-headline text-2xl font-semibold text-primary">{exam.name}</h3>
-            <p className="text-sm text-muted-foreground">{format(new Date(exam.date), "d MMMM, yyyy (EEEE)")}</p>
+            <p className="text-base font-semibold">{format(new Date(exam.date), "d MMMM, yyyy (EEEE)")}</p>
           </div>
         </CardHeader>
         <CardContent className="p-4 flex-grow flex flex-col">
