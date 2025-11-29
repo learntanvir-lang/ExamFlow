@@ -212,10 +212,11 @@ function ExamCard({ exam }: ExamCardProps) {
           </Dialog>
           <div className="p-4 pb-2 md:p-6 md:pb-2">
             <h3 className="font-headline text-xl font-semibold text-primary md:text-2xl">{exam.name}</h3>
-            <p className="text-base font-semibold md:text-lg">{format(new Date(exam.date), "d MMMM, yyyy (EEEE)")}</p>
+            {exam.subtitle && <p className="text-muted-foreground">{exam.subtitle}</p>}
+            <p className="text-lg font-bold md:text-xl">{format(new Date(exam.date), "d MMMM, yyyy (EEEE)")}</p>
           </div>
         </CardHeader>
-        <CardContent className="flex flex-1 flex-col p-4 md:p-6">
+        <CardContent className="flex flex-1 flex-col p-4 pt-2 md:p-6 md:pt-2">
           <div className="flex-grow space-y-4">
             {loadingItems ? (
               <div className="space-y-4 pt-2">

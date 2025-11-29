@@ -31,6 +31,7 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 const formSchema = z.object({
   name: z.string().min(2, 'Exam name must be at least 2 characters.'),
+  subtitle: z.string().optional(),
   date: z.date({ required_error: 'A date is required.' }),
   imageUrl: z.string().url('Please enter a valid image URL.'),
 });
@@ -50,6 +51,7 @@ export function AddExamForm({ setOpen }: AddExamFormProps) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
+      subtitle: '',
       imageUrl: randomImage?.imageUrl ?? 'https://picsum.photos/seed/exam/600/400',
     },
   });
@@ -67,6 +69,7 @@ export function AddExamForm({ setOpen }: AddExamFormProps) {
     try {
       await addDoc(collection(db, 'users', user.uid, 'exams'), {
         name: values.name,
+        subtitle: values.subtitle,
         date: values.date.toISOString(),
         imageUrl: values.imageUrl,
         createdAt: serverTimestamp(),
@@ -90,7 +93,7 @@ export function AddExamForm({ setOpen }: AddExamFormProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
           name="name"
@@ -99,6 +102,19 @@ export function AddExamForm({ setOpen }: AddExamFormProps) {
               <FormLabel>Exam Name</FormLabel>
               <FormControl>
                 <Input placeholder="e.g. Final Semester Physics" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="subtitle"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Exam Subtitle</FormLabel>
+              <FormControl>
+                <Input placeholder="e.g. Paper III" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

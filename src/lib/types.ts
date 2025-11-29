@@ -1,6 +1,7 @@
 export interface Exam {
   id: string;
   name: string;
+  subtitle?: string;
   date: string; // ISO string
   imageUrl: string;
   createdAt: any; // Firestore Timestamp
