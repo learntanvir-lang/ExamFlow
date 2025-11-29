@@ -43,21 +43,21 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen w-full">
       <Header />
-      <main className="p-4 sm:p-6 lg:p-8">
+      <main className="py-4 sm:py-6 lg:py-8">
         {loading ? (
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 sm:px-6 lg:px-8">
             <Skeleton className="h-[400px] w-full rounded-xl" />
             <Skeleton className="h-[400px] w-full rounded-xl" />
             <Skeleton className="h-[400px] w-full rounded-xl" />
            </div>
         ) : exams.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 px-4 sm:px-6 lg:px-8">
             {exams.map(exam => (
               <ExamCard key={exam.id} exam={exam} />
             ))}
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center text-center py-20 rounded-lg border-2 border-dashed">
+          <div className="flex flex-col items-center justify-center text-center py-20 rounded-lg border-2 border-dashed mx-4 sm:mx-6 lg:mx-8">
             <h2 className="text-xl font-headline font-semibold text-foreground">No Exams Yet!</h2>
             <p className="mt-2 text-muted-foreground">Click "Add Exam" to get started.</p>
           </div>
