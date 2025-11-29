@@ -38,6 +38,7 @@ import {
   NotebookText,
   X,
   MoreVertical,
+  ImageIcon,
 } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
 import { db } from '@/lib/firebase';
@@ -111,6 +112,7 @@ function ExamCard({ exam: initialExam }: ExamCardProps) {
         name: exam.name || '',
         subtitle: exam.subtitle || null,
         date: exam.date,
+        imageUrl: exam.imageUrl || '',
       };
 
       await updateDoc(examRef, dataToUpdate);
@@ -278,6 +280,10 @@ function ExamCard({ exam: initialExam }: ExamCardProps) {
                     />
                   </PopoverContent>
                 </Popover>
+                <div className="relative">
+                  <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input value={exam.imageUrl} onChange={(e) => setExam({...exam, imageUrl: e.target.value})} placeholder="Image URL" className="pl-9"/>
+                </div>
               </div>
             ) : (
               <>
